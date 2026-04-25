@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Logged Out</title>
+  <style>
+    body {
+      margin: 0;
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background: linear-gradient(135deg, #ff416c, #6a11cb);
+      font-family: Arial;
+      color: white;
+      text-align: center;
+    }
+
+    .box {
+      background: rgba(255,255,255,0.1);
+      padding: 30px;
+      border-radius: 15px;
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="box">
+    <h1>👋 Logged Out</h1>
+    <p>You have been successfully logged out.</p>
+    <p>Redirecting to login...</p>
+  </div>
+
+  <script>
+    setTimeout(() => {
+      window.location.href = "/";
+    }, 2000);
+  </script>
+
+</body>
+</html>
