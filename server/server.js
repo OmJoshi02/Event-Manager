@@ -88,6 +88,7 @@ async function main() {
         res.redirect("/dashboard.html");
     });
 
+    console.log("DB NAME:", mongoose.connection.name);
     // 🔹 Start server
     app.listen(PORT, () => {
         console.log(`Server running on port ${PORT}`);
