@@ -26,15 +26,16 @@ async function main() {
     app.use(express.json());
 
     //  SESSION FIX (CRITICAL)
+    app.set("trust proxy", 1); // 🔥 IMPORTANT for Render
+
     app.use(session({
-        secret: "secretkey",
-        resave: false,
-        saveUninitialized: false,
-        cookie: {
-            httpOnly: true,
-            secure: false,      // for localhost
-            sameSite: "lax"     // REQUIRED for Google OAuth
-        }
+    secret: "secretkey",
+    resave: false,
+    saveUninitialized: false,
+    cookie: {
+        secure: true,       // required for HTTPS (Render)
+        sameSite: "none"    // required for cross-site cookies (Google)
+    }
     }));
 
     // 🔹 Passport
