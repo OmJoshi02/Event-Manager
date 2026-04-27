@@ -25,7 +25,7 @@ async function main() {
     // 🔹 Middleware
     app.use(express.json());
 
-    // 🔥 SESSION FIX (CRITICAL)
+    //  SESSION FIX (CRITICAL)
     app.use(session({
         secret: "secretkey",
         resave: false,
@@ -41,13 +41,13 @@ async function main() {
     app.use(passport.initialize());
     app.use(passport.session());
 
-    // 🔥 DEBUG SESSION (very useful)
+    //  DEBUG SESSION (very useful)
     app.use((req, res, next) => {
         console.log("SESSION USER:", req.user);
         next();
     });
 
-    // 🔥 PREVENT CACHE (fix back button issue)
+    //  PREVENT CACHE (fix back button issue)
     app.use((req, res, next) => {
         res.set("Cache-Control", "no-store");
         next();
@@ -91,7 +91,7 @@ async function main() {
     console.log("DB NAME:", mongoose.connection.name);
     // 🔹 Start server
     app.listen(PORT, () => {
-        console.log(`Server running on port ${PORT}`);
+        console.log(`Server running on port http://localhost:${PORT}`);
     });
 }
 

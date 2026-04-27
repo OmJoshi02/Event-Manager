@@ -40,11 +40,4 @@ router.get("/", async (req, res) => {
   res.json(events);
 });
 
-function isAdmin(req, res, next) {
-  if (req.user && req.user.email === "your-email@gmail.com") {
-    return next();
-  }
-  return res.status(403).json({ message: "Not authorized" });
-}
-
 export default router;
