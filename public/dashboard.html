@@ -9,7 +9,6 @@
       background: linear-gradient(135deg, #6a11cb, #ff416c);
     }
 
-    /* NAVBAR */
     .navbar {
       background: white;
       padding: 15px 30px;
@@ -40,11 +39,6 @@
       cursor: pointer;
     }
 
-    .logout:hover {
-      background: black;
-    }
-
-    /* MAIN */
     .container {
       max-width: 900px;
       margin: 30px auto;
@@ -78,7 +72,6 @@
       background: red;
     }
 
-    /* MODAL */
     .modal {
       position: fixed;
       top: 0;
@@ -108,18 +101,6 @@
     input {
       padding: 8px;
     }
-
-    #adminPanel {
-  background: #f3f0ff;
-  padding: 15px;
-  border-radius: 10px;
-}
-
-#adminPanel input {
-  display: block;
-  margin: 5px 0;
-  width: 100%;
-}
   </style>
 </head>
 
@@ -128,9 +109,11 @@
 <!-- NAVBAR -->
 <div class="navbar">
   <div class="logo">🎟 Event Manager</div>
+
   <a href="/admin.html">
-  <button>Admin Panel</button>
-</a>
+    <button>Admin Panel</button>
+  </a>
+
   <div class="nav-right">
     <span id="username"></span>
     <a href="/auth/logout">
@@ -141,13 +124,11 @@
 
 <!-- MAIN -->
 <div class="container">
-
   <h2>Available Events</h2>
   <div id="events"></div>
 
   <h2>My Bookings</h2>
   <div id="bookings"></div>
-
 </div>
 
 <!-- MODAL -->
@@ -163,41 +144,6 @@
 </div>
 
 <script src="app.js"></script>
-
-<script>
-
-  async function initUser(retry = 0) {
-  try {
-    const res = await fetch("/auth/user", {
-      credentials: "include"
-    });
-
-    if (!res.ok) throw new Error();
-
-    const user = await res.json();
-
-    if (!user) throw new Error();
-
-    
-    document.getElementById("username").innerText =
-      "👋 " + user.name;
-
-    
-    if (user.email === "omcjoshi@gmail.com") {
-      document.getElementById("adminPanel").style.display = "block";
-    }
-
-  } catch {
-    if (retry < 3) {
-      setTimeout(() => initUser(retry + 1), 500);
-    } else {
-      window.location.href = "/";
-    }
-  }
-}
-
-  initUser();
-</script>
 
 </body>
 </html>

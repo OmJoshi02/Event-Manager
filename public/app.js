@@ -2,18 +2,12 @@ const API = "";
 
 let selectedEvent = null;
 
-
+// 🔥 Load user (NO redirect)
 async function loadUser() {
   try {
     const res = await fetch("/auth/user", {
       credentials: "include"
     });
-
-    // ❌ DO NOT redirect on 401
-    if (!res.ok) {
-      console.log("Session not ready yet");
-      return;
-    }
 
     const user = await res.json();
 
@@ -23,11 +17,11 @@ async function loadUser() {
     }
 
   } catch (err) {
-    console.log("Auth check failed:", err);
+    console.log("Auth error:", err);
   }
 }
 
-
+// 🔥 Load events
 async function loadEvents() {
   try {
     const res = await fetch(`${API}/events`, {
@@ -58,7 +52,7 @@ async function loadEvents() {
   }
 }
 
-// Modal
+// 🔥 Modal
 function openModal(id) {
   selectedEvent = id;
   document.getElementById("modal").classList.remove("hidden");
@@ -72,7 +66,7 @@ function closeModal() {
   document.getElementById("seats").value = 1;
 }
 
-// 🚀 Submit booking
+// 🔥 Booking
 async function submitBooking() {
   const name = document.getElementById("name").value.trim();
   const email = document.getElementById("email").value.trim();
@@ -96,19 +90,10 @@ async function submitBooking() {
       })
     });
 
-    const text = await res.text();
-
-    let data;
-    try {
-      data = JSON.parse(text);
-    } catch {
-      alert("Session expired. Please login again.");
-      window.location.href = "/";
-      return;
-    }
+    const data = await res.json();
 
     if (!res.ok) {
-      alert(data.message || "Error occurred");
+      alert(data.message || "Error");
       return;
     }
 
@@ -120,11 +105,10 @@ async function submitBooking() {
 
   } catch (err) {
     console.error("Booking error:", err);
-    alert("Something went wrong");
   }
 }
 
-// 🚀 Load bookings
+// 🔥 Load bookings
 async function loadBookings() {
   try {
     const res = await fetch(`${API}/bookings/my`, {
@@ -141,8 +125,8 @@ async function loadBookings() {
       div.className = "card";
 
       div.innerHTML = `
-        <p>Name : <strong>${b.name}</strong></p>
-        <p>Email : ${b.email}</p>
+        <p><strong>${b.name}</strong></p>
+        <p>${b.email}</p>
         <p>Seats: ${b.seats}</p>
         <button class="cancel" onclick="cancelBooking('${b._id}')">Cancel</button>
       `;
@@ -155,7 +139,7 @@ async function loadBookings() {
   }
 }
 
-// 🚀 Cancel booking
+// 🔥 Cancel booking
 async function cancelBooking(id) {
   try {
     const res = await fetch(`${API}/bookings/${id}`, {
@@ -174,7 +158,7 @@ async function cancelBooking(id) {
   }
 }
 
-// 🚀 Init
+// 🚀 INIT
 loadUser();
 loadEvents();
 loadBookings();
