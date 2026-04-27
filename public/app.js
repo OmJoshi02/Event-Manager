@@ -4,15 +4,26 @@ let selectedEvent = null;
 
 // ✅ Load user (ONLY username now)
 async function loadUser() {
-  const res = await fetch("/auth/user", {
-    credentials: "include"
-  });
+  try {
+    const res = await fetch("/auth/user", {
+      credentials: "include"
+    });
 
-  const user = await res.json();
+    // 🔥 handle unauthorized properly
+    if (res.status === 401) {
+      window.location.href = "/";
+      return;
+    }
 
-  if (user) {
-    document.getElementById("username").innerText =
-      "👋 " + user.name;
+    const user = await res.json();
+
+    if (user) {
+      document.getElementById("username").innerText =
+        "👋 " + user.name;
+    }
+
+  } catch (err) {
+    console.log("Auth check failed:", err);
   }
 }
 
