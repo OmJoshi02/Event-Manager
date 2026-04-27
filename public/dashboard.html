@@ -173,31 +173,34 @@
 <script>
 
   async function initUser(retry = 0) {
-    try {
-      const res = await fetch("/auth/user", {
-        credentials: "include"
-      });
+  try {
+    const res = await fetch("/auth/user", {
+      credentials: "include"
+    });
 
-      if (!res.ok) throw new Error();
+    if (!res.ok) throw new Error();
 
-      const user = await res.json();
+    const user = await res.json();
 
-      if (!user) throw new Error();
+    if (!user) throw new Error();
 
-      // ✅ show username
-      document.getElementById("username").innerText =
-        "👋 " + user.name;
+    
+    document.getElementById("username").innerText =
+      "👋 " + user.name;
 
-    } catch {
-      if (retry < 3) {
-        // 🔁 wait and retry (fixes OAuth delay issue)
-        setTimeout(() => initUser(retry + 1), 500);
-      } else {
-      
-        window.location.href = "/";
-      }
+    
+    if (user.email === "omcjoshi@gmail.com") {
+      document.getElementById("adminPanel").style.display = "block";
+    }
+
+  } catch {
+    if (retry < 3) {
+      setTimeout(() => initUser(retry + 1), 500);
+    } else {
+      window.location.href = "/";
     }
   }
+}
 
   initUser();
 </script>
