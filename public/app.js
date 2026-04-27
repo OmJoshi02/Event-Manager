@@ -2,14 +2,13 @@ const API = "";
 
 let selectedEvent = null;
 
-// ✅ Load user (ONLY username now)
+
 async function loadUser() {
   try {
     const res = await fetch("/auth/user", {
       credentials: "include"
     });
 
-    // 🔥 handle unauthorized properly
     if (res.status === 401) {
       window.location.href = "/";
       return;
@@ -27,7 +26,7 @@ async function loadUser() {
   }
 }
 
-// 🚀 Load events
+
 async function loadEvents() {
   try {
     const res = await fetch(`${API}/events`, {

@@ -26,17 +26,19 @@ async function main() {
     app.use(express.json());
 
     //  SESSION FIX (CRITICAL)
-    app.set("trust proxy", 1); // 🔥 IMPORTANT for Render
+    app.set("trust proxy", 1); // ✅ already correct
 
-    app.use(session({
-    secret: "secretkey",
-    resave: false,
-    saveUninitialized: false,
-    cookie: {
-        secure: true,       // required for HTTPS (Render)
-        sameSite: "none"    // required for cross-site cookies (Google)
-    }
-    }));
+app.use(session({
+  secret: "secretkey",
+  resave: false,
+  saveUninitialized: false,
+  proxy: true, 
+  cookie: {
+    secure: true,
+    sameSite: "none",
+    maxAge: 1000 * 60 * 60 * 24 // optional: 1 day session
+  }
+}));
 
     // 🔹 Passport
     app.use(passport.initialize());
