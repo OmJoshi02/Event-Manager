@@ -4,6 +4,7 @@ let selectedEvent = null;
 
 // load users
 async function loadUser() {
+  console.log("USER:", user);
   const res = await fetch("/auth/user", {
     credentials: "include"
   });
