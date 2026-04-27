@@ -9,8 +9,9 @@ async function loadUser() {
       credentials: "include"
     });
 
-    if (res.status === 401) {
-      console.log("User not ready yet (401) — skipping redirect");
+    // ❌ DO NOT redirect on 401
+    if (!res.ok) {
+      console.log("Session not ready yet");
       return;
     }
 
@@ -19,8 +20,6 @@ async function loadUser() {
     if (user) {
       document.getElementById("username").innerText =
         "👋 " + user.name;
-    } else {
-      console.log("No user yet");
     }
 
   } catch (err) {
