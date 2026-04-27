@@ -108,6 +108,18 @@
     input {
       padding: 8px;
     }
+
+    #adminPanel {
+  background: #f3f0ff;
+  padding: 15px;
+  border-radius: 10px;
+}
+
+#adminPanel input {
+  display: block;
+  margin: 5px 0;
+  width: 100%;
+}
   </style>
 </head>
 
@@ -127,7 +139,15 @@
 
 <!-- MAIN -->
 <div class="container">
+  <div id="adminPanel" style="display:none; margin-bottom:20px;">
+  <h2>🛠 Admin Panel</h2>
 
+  <input id="title" placeholder="Event Title">
+  <input id="date" type="date">
+  <input id="seats" type="number" placeholder="Total Seats">
+
+  <button onclick="createEvent()">Create Event</button>
+</div>
   <h2>Available Events</h2>
   <div id="events"></div>
 
@@ -151,7 +171,7 @@
 <script src="app.js"></script>
 
 <script>
-  // ✅ Robust auth + user load (handles Google login delay)
+
   async function initUser(retry = 0) {
     try {
       const res = await fetch("/auth/user", {
@@ -173,7 +193,7 @@
         // 🔁 wait and retry (fixes OAuth delay issue)
         setTimeout(() => initUser(retry + 1), 500);
       } else {
-        // 🚫 final fallback → redirect
+      
         window.location.href = "/";
       }
     }

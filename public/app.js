@@ -2,6 +2,54 @@ const API = "";
 
 let selectedEvent = null;
 
+// load users
+async function loadUser() {
+  const res = await fetch("/auth/user", {
+    credentials: "include"
+  });
+
+  const user = await res.json();
+
+  if (user) {
+    document.getElementById("username").innerText =
+      "👋 " + user.name;
+
+    // 👑 SHOW ADMIN PANEL
+    if (user.email === "your-email@gmail.com") {
+      document.getElementById("adminPanel").style.display = "block";
+    }
+  }
+}
+
+async function createEvent() {
+  const title = document.getElementById("title").value;
+  const date = document.getElementById("date").value;
+  const seats = document.getElementById("seats").value;
+
+  const res = await fetch("/events", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    credentials: "include",
+    body: JSON.stringify({
+      title,
+      date,
+      totalSeats: seats
+    })
+  });
+
+  const data = await res.json();
+
+  if (res.status === 403) {
+    alert("Not authorized ❌");
+    return;
+  }
+
+  alert("Event created ✅");
+
+  loadEvents();
+}
+
+
 // Load events
 async function loadEvents() {
   try {
@@ -73,7 +121,7 @@ async function submitBooking() {
       })
     });
 
-    // 🔥 FIX: handle HTML or JSON safely
+    //  handle HTML or JSON safely
     const text = await res.text();
     console.log("RAW RESPONSE:", text);
 

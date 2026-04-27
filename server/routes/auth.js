@@ -18,13 +18,12 @@ router.get("/google/callback",
     failureRedirect: "/"
   }),
   (req, res) => {
-    // ✅ login success → go to dashboard
     res.redirect("/dashboard.html");
   }
 );
 
 
-// 🔥 IMPORTANT: Get Logged-in User
+
 router.get("/user", (req, res) => {
   if (!req.user) {
     return res.status(401).json(null);
@@ -33,7 +32,7 @@ router.get("/user", (req, res) => {
 });
 
 
-// 🔹 Logout
+
 router.get("/logout", (req, res) => {
   req.logout((err) => {
     if (err) return res.status(500).send("Logout error");
