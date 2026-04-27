@@ -4,7 +4,6 @@ let selectedEvent = null;
 
 // load users
 async function loadUser() {
-  console.log("USER:", user);
   const res = await fetch("/auth/user", {
     credentials: "include"
   });
@@ -22,7 +21,7 @@ async function loadUser() {
   }
 }
 
-async function createEvent() {
+window.createEvent = async function () {
   const title = document.getElementById("title").value;
   const date = document.getElementById("date").value;
   const seats = document.getElementById("seats").value;
@@ -48,7 +47,7 @@ async function createEvent() {
   alert("Event created ✅");
 
   loadEvents();
-}
+};
 
 
 // Load events
@@ -203,5 +202,6 @@ async function cancelBooking(id) {
 }
 
 // Init
+loadUser(); 
 loadEvents();
 loadBookings();
