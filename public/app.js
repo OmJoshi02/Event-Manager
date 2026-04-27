@@ -10,7 +10,7 @@ async function loadUser() {
     });
 
     if (res.status === 401) {
-      window.location.href = "/";
+      console.log("User not ready yet (401) — skipping redirect");
       return;
     }
 
@@ -19,6 +19,8 @@ async function loadUser() {
     if (user) {
       document.getElementById("username").innerText =
         "👋 " + user.name;
+    } else {
+      console.log("No user yet");
     }
 
   } catch (err) {
