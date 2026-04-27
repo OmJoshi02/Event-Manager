@@ -15,7 +15,7 @@ async function loadUser() {
       "👋 " + user.name;
 
     // 👑 SHOW ADMIN PANEL
-    if (user.email === "your-email@gmail.com") {
+    if (user.email === "omcjoshi@gmail.com") {
       document.getElementById("adminPanel").style.display = "block";
     }
   }
