@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Admin Panel</title>
+  <style>
+    body {
+      font-family: Arial;
+      background: linear-gradient(135deg, #6a11cb, #ff416c);
+      margin: 0;
+    }
+
+    .container {
+      max-width: 600px;
+      margin: 50px auto;
+      background: white;
+      padding: 20px;
+      border-radius: 12px;
+    }
+
+    input {
+      display: block;
+      width: 100%;
+      margin: 10px 0;
+      padding: 10px;
+    }
+
+    button {
+      background: #6a11cb;
+      color: white;
+      border: none;
+      padding: 10px;
+      border-radius: 8px;
+      cursor: pointer;
+    }
+  </style>
+</head>
+
+<body>
+
+<div class="container">
+  <h2>🛠 Admin Panel</h2>
+
+  <input id="title" placeholder="Event Title">
+  <input id="date" type="date">
+  <input id="seats" type="number" placeholder="Total Seats">
+
+  <button onclick="createEvent()">Create Event</button>
+
+  <br><br>
+  <a href="/dashboard.html">← Back to Dashboard</a>
+</div>
+
+<script src="admin.js"></script>
+</body>
+</html>

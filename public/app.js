@@ -2,7 +2,7 @@ const API = "";
 
 let selectedEvent = null;
 
-// load users
+// ✅ Load user (ONLY username now)
 async function loadUser() {
   const res = await fetch("/auth/user", {
     credentials: "include"
@@ -13,44 +13,10 @@ async function loadUser() {
   if (user) {
     document.getElementById("username").innerText =
       "👋 " + user.name;
-
-    // 👑 SHOW ADMIN PANEL
-    if (user.email === "omcjoshi@gmail.com") {
-      document.getElementById("adminPanel").style.display = "block";
-    }
   }
 }
 
-window.createEvent = async function () {
-  const title = document.getElementById("title").value;
-  const date = document.getElementById("date").value;
-  const seats = document.getElementById("seats").value;
-
-  const res = await fetch("/events", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    credentials: "include",
-    body: JSON.stringify({
-      title,
-      date,
-      totalSeats: seats
-    })
-  });
-
-  const data = await res.json();
-
-  if (res.status === 403) {
-    alert("Not authorized ❌");
-    return;
-  }
-
-  alert("Event created ✅");
-
-  loadEvents();
-};
-
-
-// Load events
+// 🚀 Load events
 async function loadEvents() {
   try {
     const res = await fetch(`${API}/events`, {
@@ -90,19 +56,17 @@ function openModal(id) {
 function closeModal() {
   document.getElementById("modal").classList.add("hidden");
 
-  // reset inputs
   document.getElementById("name").value = "";
   document.getElementById("email").value = "";
   document.getElementById("seats").value = 1;
 }
 
-// Submit booking
+// 🚀 Submit booking
 async function submitBooking() {
   const name = document.getElementById("name").value.trim();
   const email = document.getElementById("email").value.trim();
   const seats = parseInt(document.getElementById("seats").value);
 
-  // 🔒 validation
   if (!name || !email) {
     alert("Please fill all fields");
     return;
@@ -121,9 +85,7 @@ async function submitBooking() {
       })
     });
 
-    //  handle HTML or JSON safely
     const text = await res.text();
-    console.log("RAW RESPONSE:", text);
 
     let data;
     try {
@@ -151,7 +113,7 @@ async function submitBooking() {
   }
 }
 
-// Load bookings
+// 🚀 Load bookings
 async function loadBookings() {
   try {
     const res = await fetch(`${API}/bookings/my`, {
@@ -169,7 +131,7 @@ async function loadBookings() {
 
       div.innerHTML = `
         <p>Name : <strong>${b.name}</strong></p>
-        <p>Email : ${b.email}<p>
+        <p>Email : ${b.email}</p>
         <p>Seats: ${b.seats}</p>
         <button class="cancel" onclick="cancelBooking('${b._id}')">Cancel</button>
       `;
@@ -182,7 +144,7 @@ async function loadBookings() {
   }
 }
 
-// Cancel booking
+// 🚀 Cancel booking
 async function cancelBooking(id) {
   try {
     const res = await fetch(`${API}/bookings/${id}`, {
@@ -201,7 +163,7 @@ async function cancelBooking(id) {
   }
 }
 
-// Init
-loadUser(); 
+// 🚀 Init
+loadUser();
 loadEvents();
 loadBookings();

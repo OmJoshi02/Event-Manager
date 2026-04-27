@@ -128,7 +128,9 @@
 <!-- NAVBAR -->
 <div class="navbar">
   <div class="logo">🎟 Event Manager</div>
-
+  <a href="/admin.html">
+  <button>Admin Panel</button>
+</a>
   <div class="nav-right">
     <span id="username"></span>
     <a href="/auth/logout">
@@ -139,15 +141,7 @@
 
 <!-- MAIN -->
 <div class="container">
-  <div id="adminPanel" style="display:none; margin-bottom:20px;">
-  <h2>🛠 Admin Panel</h2>
 
-  <input id="title" placeholder="Event Title">
-  <input id="date" type="date">
-  <input id="seats" type="number" placeholder="Total Seats">
-
-  <button onclick="createEvent()">Create Event</button>
-</div>
   <h2>Available Events</h2>
   <div id="events"></div>
 
