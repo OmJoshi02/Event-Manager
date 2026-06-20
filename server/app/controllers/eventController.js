@@ -2,12 +2,17 @@ import Event from "../models/Event.js"
 
 export const createEvent = async (req, res) =>{
     try{
-        const event = await Event.create(req.body)
+        const event = await Event.create({
+    ...req.body,
+    createdBy: req.user.id
+})
 
         res.status(200).json({
             message : 'Event created',
             event
         })
+
+
     }catch(e){
         console.error(e.message)
         res.status(500).json({

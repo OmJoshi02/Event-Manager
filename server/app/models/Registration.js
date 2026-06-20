@@ -16,8 +16,13 @@ const registrationSchema = mongoose.Schema({
 
     paymentStatus : {
         type : String,
-        enum : ['pending', 'paid'],
+        enum : ['pending', 'paid', 'failed', 'refunded'],
         default : 'pending'
+    },
+
+    amountPaid : {
+        type : Number,
+        default : 0
     },
 
     registrationStatus : {
@@ -30,5 +35,15 @@ const registrationSchema = mongoose.Schema({
 {
     timestamps : true
 })
+
+registrationSchema.index(
+    {
+        userId: 1,
+        eventId: 1
+    },
+    {
+        unique: true
+    }
+)
 
 export default mongoose.model('Registration',registrationSchema )

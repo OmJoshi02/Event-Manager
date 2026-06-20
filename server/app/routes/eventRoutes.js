@@ -3,7 +3,7 @@ import express, { Router } from 'express'
 import { createEvent, deleteEvent, getEvent, getEventById, updateEvent } from '../controllers/eventController.js'
 
 import validate from '../middleware/validate.js'
-import { eventSchema } from '../validator/eventValidation.js'
+import { eventSchema } from '../zodValidator/eventValidation.js'
 import authMiddleware from '../middleware/authMiddleware.js'
 import adminMiddleware from '../middleware/adminMiddleware.js'
 

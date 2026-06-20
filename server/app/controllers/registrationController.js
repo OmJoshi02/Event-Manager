@@ -25,9 +25,34 @@ export const registerForEvent = async (req, res)=>{
             })
         }
 
+        if (event.status !== 'upcoming') {
+            return res.status(400).json({
+            message: 'Registration closed'
+        })
+        }
+
+        if (new Date() > event.registrationDeadline) {
+            return res.status(400).json({
+                message: 'Registration deadline passed'
+            })
+        }
+
+        const registrationsCount =
+            await Registration.countDocuments({
+            eventId
+        })
+
+        if (registrationsCount >= event.maxParticipants) {
+            return res.status(400).json({
+                message: 'Event is full'
+            })
+        }
+
         const registration = await Registration.create({
             userId, eventId
         })
+
+        
 
         res.status(201).json({
             message : 'registration successful',

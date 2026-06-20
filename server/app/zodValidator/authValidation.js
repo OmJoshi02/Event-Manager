@@ -7,3 +7,9 @@ export const registerSchema = z.object({
     mobile : z.string().min(10).max(10),
     password : z.string().min(6)
 })
+
+export const profileSchema = z.object({
+    collegeName: z.string().min(2),
+    department: z.string().min(2),
+    year: z.number().min(1).max(4)
+})
