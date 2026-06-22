@@ -1,5 +1,6 @@
 import express from 'express'
 import dotenv from 'dotenv'
+import cors from "cors";
 import connectDB from './app/config/db.js'
 import eventRoutes from './app/routes/eventRoutes.js'
 import authRoutes from './app/routes/authRoutes.js'
@@ -13,6 +14,7 @@ dotenv.config()
 
 app.use(express.json())
 connectDB()
+app.use(cors())
 
 app.use('/events', eventRoutes)
 
