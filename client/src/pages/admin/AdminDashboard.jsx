@@ -44,8 +44,7 @@ export default function AdminDashboard() {
       .finally(() => {
         setLoading(false);
       });
-  };
-
+    };
   useEffect(() => {
     loadData();
 
