@@ -7,6 +7,35 @@ import StatCard from "../../components/StatCard";
 import Icon from "../../components/common/Icon";
 import { fmt } from "../../utils/helpers";
 
+
+function MiniBar({ value, max }) {
+  const pct = max ? Math.min(100, Math.round((value / max) * 100)) : 0;
+
+  return (
+    <div style={{ flex: 1, minWidth: 60 }}>
+      <div
+        style={{
+          height: 6,
+          background: "var(--border)",
+          borderRadius: 4,
+          overflow: "hidden",
+        }}
+      >
+        <div
+          style={{
+            height: "100%",
+            width: `${pct}%`,
+            background:
+              "linear-gradient(90deg, var(--accent), #7c3aed)",
+            borderRadius: 4,
+            transition: "width 0.6s ease",
+          }}
+        />
+      </div>
+    </div>
+  );
+}
+
 export default function AdminDashboard() {
   const [stats, setStats] = useState(null);
   const [eventStats, setEventStats] = useState([]);
