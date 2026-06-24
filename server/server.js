@@ -46,6 +46,9 @@ app.use('/api/dashboard', dashboardRoutes)
 app.use('/payment', paymentRoutes)
 
 app.use("/api/users", userRoutes);
+app.get("/", (req, res) => {
+  res.send("Backend Running");
+});
 
 const PORT = process.env.PORT || 4000
 httpServer.listen(PORT, () => {
