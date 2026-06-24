@@ -11,5 +11,5 @@ export const registerSchema = z.object({
 export const profileSchema = z.object({
     collegeName: z.string().min(2),
     department: z.string().min(2),
-    year: z.number().min(1).max(4)
+    year: z.coerce.number().min(1).max(4)
 })

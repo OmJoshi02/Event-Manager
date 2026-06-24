@@ -1,30 +1,44 @@
 import jwt from "jsonwebtoken";
+import User from "../models/User.js";
 
-const authMiddleware = (req, res, next) =>{
+const authMiddleware = async (req, res, next) => {
     try {
-        const authHeader = req.headers.authorization
 
-        if(!authHeader){
+        const authHeader = req.headers.authorization;
+
+        if (!authHeader) {
             return res.status(401).json({
-                message : 'no token provided'
-            })
+                message: "No token provided"
+            });
         }
 
-        const token = authHeader.split(' ')[1]
+        const token = authHeader.split(" ")[1];
 
         const decoded = jwt.verify(
             token,
             process.env.JWT_SECRET
-        )
+        );
 
-        req.user = decoded
+        const user = await User.findById(decoded.id);
 
-        next()
+        if (!user) {
+            return res.status(401).json({
+                message: "User no longer exists"
+            });
+        }
+
+        req.user = {
+            id: user._id,
+            role: user.role
+        };
+
+        next();
+
     } catch (error) {
-        res.status(500).json({
-            message : error.message
-        })
+        return res.status(401).json({
+            message: error.message
+        });
     }
-}
+};
 
-export default authMiddleware
+export default authMiddleware;

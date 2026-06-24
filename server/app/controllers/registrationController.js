@@ -1,133 +1,142 @@
-import Registration from "../models/Registration.js"
-import Event from "../models/Event.js"
+import { io } from "../../server.js";
+import Registration from "../models/Registration.js";
+import Event from "../models/Event.js";
 
-
-export const registerForEvent = async (req, res)=>{
+export const registerForEvent = async (req, res) => {
     try {
-        
-        const {eventId} = req.body
 
-        const userId = req.user.id
+        const { eventId } = req.body;
+        const userId = req.user.id;
 
-        const event = await Event.findById(eventId)
+        const event = await Event.findById(eventId);
 
-        if(!event){
+        if (!event) {
             return res.status(404).json({
-                message : 'event not found'
-            })
+                message: 'event not found'
+            });
         }
 
-        const existingRegistration = await Registration.findOne({userId, eventId})
+        const existingRegistration = await Registration.findOne({
+            userId,
+            eventId
+        });
 
-        if(existingRegistration){
+        if (existingRegistration) {
             return res.status(409).json({
-                message : 'already registered'
-            })
+                message: 'already registered'
+            });
         }
 
         if (event.status !== 'upcoming') {
             return res.status(400).json({
-            message: 'Registration closed'
-        })
+                message: 'Registration closed'
+            });
         }
 
         if (new Date() > event.registrationDeadline) {
             return res.status(400).json({
                 message: 'Registration deadline passed'
-            })
+            });
         }
 
-        const registrationsCount =
-            await Registration.countDocuments({
+        const registrationsCount = await Registration.countDocuments({
             eventId
-        })
+        });
 
         if (registrationsCount >= event.maxParticipants) {
             return res.status(400).json({
                 message: 'Event is full'
-            })
+            });
         }
 
         const registration = await Registration.create({
-            userId, eventId
-        })
+            userId,
+            eventId
+        });
 
-        
+        // SOCKET EVENT
+        io.emit("newRegistration", {
+            eventId,
+            registrationId: registration._id,
+            userId
+        });
 
         res.status(201).json({
-            message : 'registration successful',
+            message: 'registration successful',
             registration
-        })
+        });
+
     } catch (error) {
         res.status(500).json({
-            message : error.message
-        })
+            message: error.message
+        });
     }
-}
+};
 
-export const getMyRegistration = async (req, res) =>{
+export const getMyRegistration = async (req, res) => {
     try {
-        const user = await Registration.find({
-            userId : req.user.id
-        }).populate('eventId')
 
-        if(!user){
-            res.status(409).json({
-                message : 'user not found'
-            })
-        }
+        const registrations = await Registration.find({
+            userId: req.user.id
+        }).populate('eventId');
 
-        res.status(201).json({
-            user
-        })
-    } catch (error) {
-        res.status(500).json({
-            message : error.message
-        })
-    }
-}
-
-export const getEventRegistrations = async (req, res) =>{
-    try {
-        const user = await Registration.find({
-            eventId : req.params.eventId
-        }).populate('userId')
-
-         if(!user){
-            res.status(409).json({
-                message : 'user not found'
-            })
-        }
-
-        res.status(201).json({
-            user
-        })
-    } catch (error) {
-        res.status(500).json({
-            message : error.message
-        })
-    }
-}
-
-export const cancelRegistration = async (req, res) =>{
-
-    try {
-        const registration = await Registration.findByIdAndDelete(req.params.id);
-
-        if(!registration){
-            return res.status(404).json({
-                message : 'registration not found'
-            })
-        }
+        const validRegistrations =
+            registrations.filter(reg => reg.eventId);
 
         res.status(200).json({
-            message : "registration deleted successfully"
-        })
+            registrations: validRegistrations
+        });
 
     } catch (error) {
         res.status(500).json({
-            message : error.message
-        })
+            message: error.message
+        });
     }
-    
-}
+};
+
+export const getEventRegistrations = async (req, res) => {
+    try {
+
+        const registrations = await Registration.find({
+            eventId: req.params.eventId
+        }).populate('userId');
+
+        res.status(200).json({
+            registrations
+        });
+
+    } catch (error) {
+        res.status(500).json({
+            message: error.message
+        });
+    }
+};
+
+export const cancelRegistration = async (req, res) => {
+    try {
+
+        const registration = await Registration.findByIdAndDelete(
+            req.params.id
+        );
+
+        if (!registration) {
+            return res.status(404).json({
+                message: 'registration not found'
+            });
+        }
+
+        io.emit("registrationCancelled", {
+            registrationId: registration._id,
+            eventId: registration.eventId
+        });
+
+        res.status(200).json({
+            message: "registration deleted successfully"
+        });
+
+    } catch (error) {
+        res.status(500).json({
+            message: error.message
+        });
+    }
+};
