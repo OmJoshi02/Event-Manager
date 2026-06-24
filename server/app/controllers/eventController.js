@@ -1,3 +1,5 @@
+import { io } from "../../server.js"
+
 import Event from "../models/Event.js"
 
 export const createEvent = async (req, res) =>{
@@ -6,6 +8,9 @@ export const createEvent = async (req, res) =>{
     ...req.body,
     createdBy: req.user.id
 })
+
+io.emit("eventCreated", event);
+
 
         res.status(200).json({
             message : 'Event created',
@@ -46,19 +51,24 @@ export const getEventById = async (req, res)=>{
         res.status(200).json(event)
     } catch (error) {
         res.status(500).json({
-            message : error
-        })
+    message : error.message
+})
     }
 }
 
 
 export const updateEvent = async (req, res) =>{
     try {
-        const event = await Event.findByIdAndUpdate(
-            req.params.id,
-            req.body,
-            {new : true}
-        )
+
+     const event= await Event.findByIdAndUpdate(
+    req.params.id,
+    req.body,
+    {
+        new: true,
+        runValidators: true
+    }
+)       
+        io.emit("eventUpdated", event);
 
         if(!event){
             return res.status(404).json({
@@ -69,10 +79,12 @@ export const updateEvent = async (req, res) =>{
         res.status(200).json(event)
 
     } catch (error) {
-        res.status(500).json({
-            message : error
-        })
-    }
+    console.log("UPDATE ERROR:", error);
+
+    res.status(500).json({
+        message: error.message
+    });
+}
 }
 
 export const deleteEvent = async (req, res) =>{
@@ -85,6 +97,8 @@ export const deleteEvent = async (req, res) =>{
                 message : 'event not found'
             })
         }
+
+        io.emit("eventDeleted", req.params.id);
 
         res.status(200).json({
             message : "event deleted successfully"
